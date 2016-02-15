@@ -1,7 +1,3 @@
--- point_energy_ball_launcher
--- Because Portal uses this and GMod doesn't
--- michaelhitchens.com
-
 ENT.Type = "point"
 ENT.Base = "base_point"
 
@@ -10,27 +6,36 @@ ENT.Base = "base_point"
 -- they will all use the same values
 local temp = {}
 
+-- Run whenever GMod decides. Typically before giving control to the player.
 function ENT:Initialize()
-	-- do something!
-	local pos = self:GetPos();
-
-	local spawner = ents.Create( "point_combine_ball_launcher" )
-	if ( IsValid( spawner ) ) then
-		
+	-- Create a point_combine_ball_launcher
+	self.spawner = ents.Create( "point_combine_ball_launcher" )
+	if ( IsValid( self.spawner ) ) then
+		-- Copy the values from the loaded point_energy_ball_launcher
 		for i, v in pairs(temp) do
 			print(i, v)
-			spawner:SetKeyValue( i, v )
+			self.spawner:SetKeyValue( i, v )
 		end
-		spawner:SetKeyValue( "maxballbounces", temp.BallLifetime )
-		--print("maxballbounces", temp.BallLifetime)
 		
-		spawner:Spawn()
-		print("Made ball launcher")
+		-- Make adjustments since the properties of the 2 instances don't necessarily correspond
+		self.spawner:SetKeyValue( "maxballbounces", temp.BallLifetime )
+		
+		-- Then create it!
+		self.spawner:Spawn()
+		print( "Made ball launcher at ", self:GetPos() )
 	end
 	
 	
 end
 
+-- We need this hook to trap values that the BSP provides in order to properly
+-- create the combine_lancher in ENT:Initialize. We store the values in a
+-- temporary array, but this method doesn't work well if there are more than
+-- one point_energy_ball_launcher; this is generally called before Initialize
+-- but the order in which the two are called is not guarenteed.
+--
+-- key (string): The entity property key, corresponding to Hammer values
+-- value (string): The value associated with said key
 function ENT:KeyValue(key,value)
 	temp[key] = value
 	print("ENT:KeyValue", key, value)
