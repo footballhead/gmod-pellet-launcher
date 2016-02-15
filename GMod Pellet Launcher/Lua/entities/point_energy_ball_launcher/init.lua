@@ -17,8 +17,17 @@ function ENT:Initialize()
 			self.spawner:SetKeyValue( i, v )
 		end
 		
-		-- Make adjustments since the properties of the 2 instances don't necessarily correspond
+		-- Make adjustments since the properties of the 2 don't correspond 1:1
+		
+		-- Note: point_combine_ball_launcher doesn't express life time in
+		-- seconds; it uses number of bounces. The two may be proportional, idk.
+		-- Also, combine balls don't have a concept of "infinite life" so we
+		-- just use an arbitrarily high number
+		if ( temp.BallLifetime == "-1" ) then
+			temp.BallLifetime = "10000";
+		end
 		self.spawner:SetKeyValue( "maxballbounces", temp.BallLifetime )
+		-- MinLifeAfterPortal?
 		
 		-- Then create it!
 		self.spawner:Spawn()
