@@ -1,0 +1,10 @@
+"AddonInfo"
+{
+	"name"		"GMod Pellet Launcher"
+	"version"	"V1"
+	"up_date"	"15/02/2016"
+	"author_name"	"footballhead"
+	"author_email"	"mdhitchens@gmail.com"
+	"author_url"	"www.michaelhitchens.com"
+	"info"		" A translator from point_energy_ball_launcher to point_combine_ball_launcher for GMod"
+}
